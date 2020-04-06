@@ -3,14 +3,16 @@ const connection = require('../database/connection');
 
 
 module.exports = {
-    async index(request, response) {
+    async index( r) {
         const ongs = await connection('ongs').select('*');
     
-        return response.json(ongs);
+        return r.json(ongs);
     },
     
-    async create(request, response) {
-        const {name, email, whatsapp, city, uf} = request.body;
+    async create(q, response) {
+
+        console.log(q.body)
+        const {name, email, whatsapp, city, uf} = q.body;
 
         const id = crypto.randomBytes(4).toString('HEX');
     
@@ -20,31 +22,19 @@ module.exports = {
          email,
          whatsapp,
          city,
-         uf   
+         uf
         })
     
         return response.json ({ id });  
     },
 
-    async indexincidents(request, response) {
-        const incidents = await connection('incidents').select('*');
+    async index(request, response) {
+        const ongs = await connection('ongs').select('*');
     
-        return response.json(incidents);
+        return response.json(ongs);
     },
     
-    async createincidents(request, response) {
-        const { title, description, value } = request.body;
-        const ong_id = request.headers.authorization;
 
-        const [id] = await connection('incidents').insert({
-            title,
-            description,
-            value,
-            ong_id,
-        });
-
-        return response.json({ id });
-    }
 
 
 };
